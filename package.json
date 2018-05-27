@@ -1,7 +1,7 @@
 {
-    "name": "cordova-plugin-google-drive",
+    "name": "cordova-plugin-googledrive",
     "description": "",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "homepage": "",
     "repository": {
         "type": "git",
@@ -11,7 +11,7 @@
         "url": ""
     },
     "cordova": {
-        "id": "cordova-plugin-google-drive",
+        "id": "cordova-plugin-googledrive",
         "platforms": [
             "android"
         ]
