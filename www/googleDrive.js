@@ -7,7 +7,7 @@ var exec = cordova.require('cordova/exec');
 
 module.exports = {
     createFile: function (successCallback, errorCallback, title, contents, mimeType, inAppFolder) {
-        var service = 'googleDrive';
+        var service = 'GoogleDrive';
         var action = 'createFile';
         exec(successCallback, errorCallback, service, action, [title, contents, mimeType, inAppFolder]);
     }
