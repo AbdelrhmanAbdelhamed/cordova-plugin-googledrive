@@ -5,7 +5,7 @@
     "homepage": "",
     "repository": {
         "type": "git",
-        "url": ""
+        "url": "https://github.com/AbdelrhmanAbdelhamed/cordova-plugin-googledrive.git"
     },
     "bugs": {
         "url": ""
