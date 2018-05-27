@@ -1,5 +1,5 @@
 
-package org.apache.cordova.exception;
+package org.loyalx;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;

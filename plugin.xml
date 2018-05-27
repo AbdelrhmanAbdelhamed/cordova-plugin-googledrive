@@ -22,11 +22,11 @@
 
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="GoogleDrive" >
-                <param name="android-package" value="exception.loyalx.GoogleDrive"/>
+                <param name="android-package" value="org.loyalx.GoogleDrive"/>
             </feature>
         </config-file>
 
-        <source-file src="src/android/GoogleDrive.java" target-dir="src/exception/loyalx" />
+        <source-file src="src/android/GoogleDrive.java" target-dir="src/org/loyalx" />
     </platform>
  
 

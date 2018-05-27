@@ -23,6 +23,6 @@
     "engines":{
         "cordova" : ">=3.0.0"
     },
-    "author": "exception",
+    "author": "loyalx",
     "license": "MIT"
 }
