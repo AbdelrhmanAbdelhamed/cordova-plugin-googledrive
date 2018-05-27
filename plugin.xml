@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://cordova.apache.org/ns/plugins/1.0"
+           id="cordova-plugin-google-drive"
+      version="0.0.1">
+    <name>Google Drive</name>
+
+    <js-module src="www/googleDrive.js" name="GoogleDrive">
+        <clobbers target="cordova.plugins.googleDrive" />
+    </js-module>
+
+    
+    <!-- android -->
+    <platform name="android">
+        <framework src="com.google.android.gms:play-services-auth:11.6.2" type="gradleReference" />
+        <framework src="com.google.android.gms:play-services-drive:11.6.2" type="gradleReference" />
+        <framework src="com.google.android.gms:play-services-tasks:11.6.2" type="gradleReference" />
+
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="GoogleDrive" >
+                <param name="android-package" value="exception.loyalx.GoogleDrive"/>
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/GoogleDrive.java" target-dir="src/exception/loyalx" />
+    </platform>
+ 
+
+    <!-- TODO: Uncomment this if you would like to add iOS support -->
+    <!-- ios -->
+    <!--
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="GoogleDrive">
+                <param name="ios-package" value="CDVGoogleDrive"/>
+            </feature>
+        </config-file>
+        <source-file src="src/ios/CDVGoogleDrive.m" />
+    </platform>
+    -->
+
+</plugin>
