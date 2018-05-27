@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <plugin xmlns="http://cordova.apache.org/ns/plugins/1.0"
-           id="cordova-plugin-google-drive"
+           id="cordova-plugin-googledrive"
       version="0.0.1">
     <name>Google Drive</name>
 
