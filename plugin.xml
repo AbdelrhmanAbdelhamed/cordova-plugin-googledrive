@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<plugin xmlns="http://cordova.apache.org/ns/plugins/1.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
            id="cordova-plugin-googledrive"
       version="1.0.0">
     <name>Google Drive</name>
