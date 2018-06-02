@@ -141,24 +141,9 @@ public class GoogleDrive extends CordovaPlugin {
         try {
           String title = args.getString(0);
           Boolean inAppFolder = args.getBoolean(1);
-          getFileWithTitle(title, inAppFolder).addOnSuccessListener(cordova.getActivity(), metadataBuffer -> {
-            if (metadataBuffer.getCount() > 0) {
-              Metadata mb = metadataBuffer.get(0);
-              String contents = retrieveContents(mb.getDriveId().asDriveFile());
-              try {
-                mCallbackContext.sendPluginResult(
-                    new PluginResult(PluginResult.Status.OK, new JSONObject().put("contents", contents)));
-              } catch (JSONException e) {
-                mCallbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.getLocalizedMessage()));
-              }
-              metadataBuffer.release();
-            }
-          }).addOnFailureListener(e -> {
-            mCallbackContext.sendPluginResult(
-                new PluginResult(PluginResult.Status.ERROR, "Error retrieving files: " + e.getLocalizedMessage()));
-          });
+          getFileWithTitle(title, inAppFolder);
         } catch (JSONException e) {
-          e.printStackTrace();
+          callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.getLocalizedMessage()));
         }
       });
       return true;
@@ -222,12 +207,12 @@ public class GoogleDrive extends CordovaPlugin {
    */
   private Task<DriveFile> createFile(String title, String contents, String mimeType, Boolean inAppFolder) {
 
-    final Task<DriveFolder> appFolderTask = inAppFolder ? getDriveResourceClient().getAppFolder()
+    final Task<DriveFolder> folderTask = inAppFolder ? getDriveResourceClient().getAppFolder()
         : getDriveResourceClient().getRootFolder();
     final Task<DriveContents> createContentsTask = getDriveResourceClient().createContents();
 
-    final Task<DriveFile> driveFileTask = Tasks.whenAll(appFolderTask, createContentsTask).continueWithTask(task -> {
-      DriveFolder parent = appFolderTask.getResult();
+    final Task<DriveFile> driveFileTask = Tasks.whenAll(folderTask, createContentsTask).continueWithTask(task -> {
+      DriveFolder parent = folderTask.getResult();
       DriveContents driveContents = createContentsTask.getResult();
       OutputStream outputStream = driveContents.getOutputStream();
       try (Writer writer = new OutputStreamWriter(outputStream)) {
@@ -240,15 +225,25 @@ public class GoogleDrive extends CordovaPlugin {
     return driveFileTask;
   }
 
-  private Task<MetadataBuffer> getFileWithTitle(String title, Boolean inAppFolder) {
+  private void getFileWithTitle(String title, Boolean inAppFolder) {
     Query query = new Query.Builder().addFilter(Filters.eq(SearchableField.TITLE, title)).build();
-    Task<MetadataBuffer> queryTask = getDriveResourceClient()
-        .queryChildren(inAppFolder ? getDriveResourceClient().getAppFolder().getResult()
-            : getDriveResourceClient().getRootFolder().getResult(), query);
-    return queryTask;
+
+    getDriveResourceClient().getRootFolder().addOnSuccessListener(folder -> {
+      Task<MetadataBuffer> queryTask = getDriveResourceClient().queryChildren(folder, query);
+      queryTask.addOnSuccessListener(cordova.getActivity(), metadataBuffer -> {
+
+        if (metadataBuffer.getCount() > 0) {
+          Metadata mb = metadataBuffer.get(0);
+          retrieveContents(mb.getDriveId().asDriveFile());
+          metadataBuffer.release();
+        }
+      }).addOnFailureListener(cordova.getActivity(), e -> mCallbackContext.sendPluginResult(
+          new PluginResult(PluginResult.Status.ERROR, "Error retrieving files: " + e.getLocalizedMessage())));
+    });
+
   }
 
-  private String retrieveContents(DriveFile file) {
+  private void retrieveContents(DriveFile file) {
     StringBuilder contentsBuilder = new StringBuilder();
 
     Task<DriveContents> openFileTask = getDriveResourceClient().openFile(file, DriveFile.MODE_READ_ONLY);
@@ -259,6 +254,8 @@ public class GoogleDrive extends CordovaPlugin {
         while ((line = reader.readLine()) != null) {
           contentsBuilder.append(line).append("\n");
         }
+        mCallbackContext.sendPluginResult(
+            new PluginResult(PluginResult.Status.OK, new JSONObject().put("contents", contentsBuilder.toString())));
       }
       Task<Void> discardTask = getDriveResourceClient().discardContents(contents);
       return discardTask;
@@ -267,7 +264,5 @@ public class GoogleDrive extends CordovaPlugin {
           new PluginResult(PluginResult.Status.ERROR, "Unable to read contents: " + e.getLocalizedMessage()));
     });
 
-    return contentsBuilder.toString();
   }
-
 }
