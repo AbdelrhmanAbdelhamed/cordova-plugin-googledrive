@@ -3,7 +3,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
            id="cordova-plugin-googledrive"
       version="1.0.0">
-    <name>Google Drive</name>
+    <name>GoogleDrive</name>
 
     <engines>
         <engine name="cordova" version=">=3.0.0" />

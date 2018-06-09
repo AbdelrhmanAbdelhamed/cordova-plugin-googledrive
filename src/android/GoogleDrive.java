@@ -128,7 +128,7 @@ public class GoogleDrive extends CordovaPlugin {
               callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, ex.getLocalizedMessage()));
             }
           }).addOnFailureListener(cordova.getActivity(), e -> {
-            mCallbackContext.sendPluginResult(
+            callbackContext.sendPluginResult(
                 new PluginResult(PluginResult.Status.ERROR, "Failed to upload file: " + e.getLocalizedMessage()));
           });
         } catch (JSONException ex) {
