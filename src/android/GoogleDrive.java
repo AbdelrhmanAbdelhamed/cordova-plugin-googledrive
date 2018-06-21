@@ -136,12 +136,12 @@ public class GoogleDrive extends CordovaPlugin {
         }
       });
       return true;
-    } else if (action.equals("getFileWithTitle")) {
+    } else if (action.equals("retrieveFileContentsByTitle")) {
       cordova.getThreadPool().execute(() -> {
         try {
           String title = args.getString(0);
           Boolean inAppFolder = args.getBoolean(1);
-          getFileWithTitle(title, inAppFolder);
+          retrieveFileContentsByTitle(title, inAppFolder);
         } catch (JSONException e) {
           callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, e.getLocalizedMessage()));
         }
@@ -225,7 +225,7 @@ public class GoogleDrive extends CordovaPlugin {
     return driveFileTask;
   }
 
-  private void getFileWithTitle(String title, Boolean inAppFolder) {
+  private void retrieveFileContentsByTitle(String title, Boolean inAppFolder) {
     Query query = new Query.Builder().addFilter(Filters.eq(SearchableField.TITLE, title)).build();
 
     getDriveResourceClient().getRootFolder().addOnSuccessListener(folder -> {

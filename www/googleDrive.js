@@ -11,8 +11,8 @@ module.exports = {
         var action = 'createFile';
         exec(successCallback, errorCallback, service, action, [title, contents, mimeType, inAppFolder]);
     },
-    getFileWithTitle: function (title, inAppFolder, successCallback, errorCallback) {
-        var action = 'getFileWithTitle';
+    retrieveFileContentsByTitle: function (title, inAppFolder, successCallback, errorCallback) {
+        var action = 'retrieveFileContentsByTitle';
         exec(successCallback, errorCallback, service, action, [title, inAppFolder]);
     }
 };
