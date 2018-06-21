@@ -227,8 +227,10 @@ public class GoogleDrive extends CordovaPlugin {
 
   private void retrieveFileContentsByTitle(String title, Boolean inAppFolder) {
     Query query = new Query.Builder().addFilter(Filters.eq(SearchableField.TITLE, title)).build();
+    final Task<DriveFolder> folderTask = inAppFolder ? getDriveResourceClient().getAppFolder()
+      : getDriveResourceClient().getRootFolder();
 
-    getDriveResourceClient().getRootFolder().addOnSuccessListener(folder -> {
+    folderTask.addOnSuccessListener(folder -> {
       Task<MetadataBuffer> queryTask = getDriveResourceClient().queryChildren(folder, query);
       queryTask.addOnSuccessListener(cordova.getActivity(), metadataBuffer -> {
 
