@@ -228,7 +228,7 @@ public class GoogleDrive extends CordovaPlugin {
   private void retrieveFileContentsByTitle(String title, Boolean inAppFolder) {
     Query query = new Query.Builder().addFilter(Filters.eq(SearchableField.TITLE, title)).build();
     final Task<DriveFolder> folderTask = inAppFolder ? getDriveResourceClient().getAppFolder()
-      : getDriveResourceClient().getRootFolder();
+        : getDriveResourceClient().getRootFolder();
 
     folderTask.addOnSuccessListener(folder -> {
       Task<MetadataBuffer> queryTask = getDriveResourceClient().queryChildren(folder, query);
@@ -238,6 +238,13 @@ public class GoogleDrive extends CordovaPlugin {
           Metadata mb = metadataBuffer.get(0);
           retrieveContents(mb.getDriveId().asDriveFile());
           metadataBuffer.release();
+        } else {
+          try {
+            mCallbackContext
+                .sendPluginResult(new PluginResult(PluginResult.Status.OK, new JSONObject().put("contents", "")));
+          } catch (JSONException ex) {
+            mCallbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, ex.getLocalizedMessage()));
+          }
         }
       }).addOnFailureListener(cordova.getActivity(), e -> mCallbackContext.sendPluginResult(
           new PluginResult(PluginResult.Status.ERROR, "Error retrieving files: " + e.getLocalizedMessage())));
